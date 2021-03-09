@@ -1,0 +1,17 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: pod-annotation-webhook
+webhooks:
+  - name: webhook-server.webhooks.svc
+    clientConfig:
+      service:
+        name: webhook-server
+        namespace: webhooks
+        path: "/mutate"
+      caBundle: "CA_BASE64_PEM"    #Retain the quotes when you copy the caBundle here. Please read the note below on how to add specific values here.
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
